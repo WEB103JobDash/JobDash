@@ -1,0 +1,3 @@
+- clone the repo
+- npm run install
+- git fetch to get most recent work of all branches
