@@ -1,3 +1,4 @@
 - clone the repo
-- npm run install
+- in root, npm i
+- in client, npm i
 - git fetch to get most recent work of all branches
