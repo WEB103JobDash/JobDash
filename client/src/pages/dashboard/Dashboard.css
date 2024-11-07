@@ -5,16 +5,22 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+  }
+  
+  html, body {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
-.dashboard {
+  .dashboard {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.header {
+    height: 100%;  /* Full viewport height */
+    width: 100%;
+  }
+  
+  .header {
     width: 100%;
     text-align: center;
     background-color: #ff9999;
@@ -23,65 +29,65 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
-}
-
-.filter-section {
-    width: 80%;
+  }
+  
+  .filter-section {
+    width: 90%; /* Increase width for more screen coverage */
+    max-width: 1200px; /* Set a maximum width for larger screens */
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.filter-icon, .search-bar {
+    margin-left: 60px;
+  }
+  
+  .filter-icon {
     display: flex;
     align-items: center;
-}
-
-.search-bar input {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    width: 80%;
-}
-
-.card {
+    height: 400px;  /* Fixed height */
+    padding: 10px;
+    margin-left: 60px;
+  }
+  
+  .card {
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 15px;
     text-align: left;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
+    height: 200px;
+  }
+  
+  .card-header {
     font-size: 18px;
     font-weight: bold;
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.card-info {
+  }
+  
+  .card-info {
     margin: 10px 0;
     font-size: 14px;
-}
-
-.card-actions button {
+  }
+  
+  .card-actions button {
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f1f1f1;
+    background-color: #ff9999;
     cursor: pointer;
     margin-right: 10px;
-}
-
-.card-actions button:hover {
+  }
+  
+  .card-actions button:hover {
     background-color: #ddd;
-}
+  }
+  
