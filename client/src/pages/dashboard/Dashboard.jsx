@@ -1,8 +1,9 @@
 // Dashboard.js
 import { useState } from 'react';
 import React from 'react';
-import Card from './components/Card.jsx';
+import Card from './components/card/Card.jsx';
 import SearchBar from './components/searchBar/SearchBar.jsx';
+import FilterButtons from './components/filterOptions/FilterButtons.jsx';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -29,7 +30,11 @@ function Dashboard() {
         <div className="dashboard">
             <div className="header">Dashboard</div>
 
+           
             <div className="filter-section">
+                <div className="filter-options">
+                    <FilterButtons />
+                </div>
                 <SearchBar onSearch={setSearchQuery} />
             </div>
 

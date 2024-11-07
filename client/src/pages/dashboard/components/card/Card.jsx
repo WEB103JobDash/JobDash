@@ -1,5 +1,6 @@
 // Card.js
 import React from 'react';
+import './Card.css';
 
 function Card({ company }) {
     return (
