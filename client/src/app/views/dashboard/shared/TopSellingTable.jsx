@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Table from "@mui/material/Table";
@@ -9,6 +10,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 import { styled, useTheme } from "@mui/material/styles";
 import Edit from "@mui/icons-material/Edit";
 import { Paragraph } from "app/components/Typography";
@@ -59,6 +61,39 @@ export default function TopSellingTable() {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
+  // filter states
+  const [filters, setFilters] = useState({
+    companyName: '',
+    position: '',
+    status: ''
+  });
+
+  // filter change handler
+  const handleFilterChange = (field) => (event) => {
+    setFilters({
+      ...filters,
+      [field]: event.target.value
+    });
+  };
+
+  const filteredProductList = productList.filter(product => {
+    return (
+      product.name.toLowerCase().includes(filters.companyName.toLowerCase()) &&
+      product.position.toLowerCase().includes(filters.position.toLowerCase()) &&
+      (filters.status === '' || product.status === filters.status)
+    );
+  });
+
+  // Sorting logic
+  const sortedProductList = [...filteredProductList].sort((a, b) => {
+    if (filters.sortBy === 'asc') {
+      return a.name.localeCompare(b.name);
+    } else if (filters.sortBy === 'desc') {
+      return b.name.localeCompare(a.name);
+    }
+    return 0;
+  });
+
   return (
     <Card elevation={3} sx={{ pt: "20px", mb: 3 }}>
       <CardHeader>
@@ -69,16 +104,63 @@ export default function TopSellingTable() {
         </Select>
       </CardHeader>
 
+      <Box display="flex" justifyContent="space-between" p={2}>
+        <Select
+          label="Sort by"
+          variant="outlined"
+          size="small"
+          value={filters.sortBy}
+          onChange={handleFilterChange('sortBy')}
+          displayEmpty
+        >
+          <MenuItem value="" disabled>
+            Sort by
+          </MenuItem>
+          <MenuItem value="asc">Company (A-Z)</MenuItem>
+          <MenuItem value="desc">Company (Z-A)</MenuItem>
+        </Select>
+        <TextField
+          label="Company Name"
+          variant="outlined"
+          size="small"
+          value={filters.companyName}
+          onChange={handleFilterChange('companyName')}
+        />
+        <TextField
+          label="Position"
+          variant="outlined"
+          size="small"
+          value={filters.position}
+          onChange={handleFilterChange('position')}
+        />
+        <Select
+          label="Status"
+          variant="outlined"
+          size="small"
+          value={filters.status}
+          onChange={handleFilterChange('status')}
+          displayEmpty
+        >
+          <MenuItem value="" disabled>
+            Status
+          </MenuItem>
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="applied">Applied</MenuItem>
+          <MenuItem value="interview">Interview</MenuItem>
+          <MenuItem value="rejected">Rejected</MenuItem>
+        </Select>
+      </Box>
+
       <Box overflow="auto">
         <ProductTable>
           <TableHead>
             <TableRow>
               <TableCell colSpan={4} sx={{ px: 3 }}>
-               Company Name
+                Company Name
               </TableCell>
 
               <TableCell colSpan={2} sx={{ px: 0 }}>
-                Position 
+                Position
               </TableCell>
 
               <TableCell colSpan={2} sx={{ px: 0 }}>
@@ -92,7 +174,7 @@ export default function TopSellingTable() {
           </TableHead>
 
           <TableBody>
-            {productList.map((product, index) => (
+            {sortedProductList.map((product, index) => (
               <TableRow key={index} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: "capitalize" }}>
                   <Box display="flex" alignItems="center" gap={4}>
