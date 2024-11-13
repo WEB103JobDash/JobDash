@@ -21,7 +21,7 @@ export default function AppEchart() {
   return (
     <Container>
       <Box className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Charts", path: "/charts" }, { name: "Echarts" }]} />
+        <Breadcrumb routeSegments={[{ name: "Analytics" }]} />
       </Box>
 
       <SimpleCard title="Doughnut Chart">
@@ -55,9 +55,6 @@ export default function AppEchart() {
 
       <Box sx={{ py: "12px" }} />
 
-      <SimpleCard title="Area Chart">
-        <AreaChart height="350px" color={[theme.palette.primary.main]} />
-      </SimpleCard>
     </Container>
   );
 }

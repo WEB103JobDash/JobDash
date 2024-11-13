@@ -211,7 +211,7 @@ export default function TopSellingTable() {
   );
 }
 
-const productList = [
+export const productList = [
   {
     imgUrl: "https://logo.clearbit.com/google.com",
     name: "Google",
