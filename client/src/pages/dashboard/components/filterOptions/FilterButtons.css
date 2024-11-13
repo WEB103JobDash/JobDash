@@ -1,0 +1,31 @@
+.filter-buttons {
+    display: flex;                /* Ensure the buttons are displayed inline (horizontally) */
+    gap: 10px;                    /* Space between each button */
+    align-items: center;          /* Vertically align the buttons in the middle */
+    justify-content: flex-start;  /* Ensure the buttons are aligned to the left (optional) */
+  }
+  
+  .filter-button {
+    padding: 8px 16px;            /* Padding inside each button */
+   margin-right:10px;
+    font-size: 14px;              /* Set font size */
+    font-weight: 500;             /* Bolden the font */
+    border-radius: 20px;          /* Round the button corners */
+    background-color: #f0f0f0;    /* Light background color */
+    color: #333;                  /* Default text color */
+    border: 1px solid #ccc;       /* Light gray border */
+    cursor: pointer;             /* Pointer cursor on hover */
+    transition: all 0.3s ease;    /* Smooth transition for hover effect */
+  }
+  
+  .filter-button:hover {
+    background-color: #e0e0e0;    /* Light gray on hover */
+    border-color: #999;            /* Darker border color on hover */
+  }
+  
+  .filter-button.active {
+    background-color: #007bff;     /* Blue background for active state */
+    color: white;                  /* White text when active */
+    border-color: #0056b3;         /* Darker border for active button */
+  }
+  
