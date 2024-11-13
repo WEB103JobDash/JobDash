@@ -13,6 +13,8 @@ import materialRoutes from "app/views/material-kit/MaterialRoutes";
 const AppEchart = Loadable(lazy(() => import("app/views/charts/echarts/AppEchart")));
 // DASHBOARD PAGE
 const Analytics = Loadable(lazy(() => import("app/views/dashboard/Analytics")));
+// APPLICATION DETAILS PAGE 
+const ApplicationDetails = Loadable(lazy(() => import("app/views/applicationDetails/ApplicationDetails")));
 
 const routes = [
   { path: "/", element: <Navigate to="dashboard/default" /> },
@@ -27,7 +29,9 @@ const routes = [
       // dashboard route
       { path: "/dashboard/default", element: <Analytics />, auth: authRoles.admin },
       // e-chart route
-      { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }
+      { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor },
+       // application details route with dynamic ID
+       { path: "/application-details/:id", element: <ApplicationDetails />, auth: authRoles.user },
     ]
   },
 

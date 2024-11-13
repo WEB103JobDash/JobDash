@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Table from "@mui/material/Table";
@@ -177,10 +178,13 @@ export default function TopSellingTable() {
             {sortedProductList.map((product, index) => (
               <TableRow key={index} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: "capitalize" }}>
-                  <Box display="flex" alignItems="center" gap={4}>
-                    <Avatar src={product.imgUrl} />
-                    <Paragraph>{product.name}</Paragraph>
-                  </Box>
+                {/* Click to go to Application Details Page */}
+                  <Link to={`/application-details/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    <Box display="flex" alignItems="center" gap={4}>
+                      <Avatar src={product.imgUrl} />
+                      <Paragraph>{product.name}</Paragraph>
+                    </Box>
+                  </Link>
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
@@ -213,30 +217,35 @@ export default function TopSellingTable() {
 
 const productList = [
   {
+    id: 1,
     imgUrl: "https://logo.clearbit.com/google.com",
     name: "Google",
     position: "SDE I",
     status: "applied"
   },
   {
+    id: 2,
     imgUrl: "https://logo.clearbit.com/facebook.com",
     name: "Facebook",
     position: "SDE II",
     status: "interview"
   },
   {
+    id: 3,
     imgUrl: "https://logo.clearbit.com/amazon.com",
     name: "Amazon",
     position: "Senior SDE",
     status: "interview"
   },
   {
+    id: 4,
     imgUrl: "https://logo.clearbit.com/meta.com",
     name: "Meta",
     position: "SDE III",
     status: "rejected"
   },
   {
+    id: 5,
     imgUrl: "https://logo.clearbit.com/netflix.com",
     name: "Netflix",
     position: "Principal SDE",
