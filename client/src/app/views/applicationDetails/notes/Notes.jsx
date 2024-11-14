@@ -54,9 +54,10 @@ function Notes() {
     }
   }
 
-  // Handle note editing
-  async function handleEditNote() {
+// Handle note editing
+async function handleEditNote() {
     if (!editContent.trim()) return; // Don't update with empty content
+    console.log("Saving note with content:", editContent);  // Log content to check
     try {
       const response = await fetch(`http://localhost:5000/api/notes/${editNote.id}`, {
         method: "PUT",
@@ -65,18 +66,26 @@ function Notes() {
         },
         body: JSON.stringify({ note_content: editContent }),
       });
+  
       const data = await response.json();
-      setNotes((prevNotes) =>
-        prevNotes.map((note) =>
-          note.id === data.id ? { ...note, note_content: data.note_content } : note
-        )
-      ); // Update the note in the state
-      setEditNote(null); // Reset edit state
-      setEditContent(""); // Clear edit input field
+      console.log("Response data:", data); // Log response from server
+  
+      if (response.ok) {
+        setNotes((prevNotes) =>
+          prevNotes.map((note) =>
+            note.id === data.id ? { ...note, note_content: data.note_content } : note
+          )
+        );
+        setEditNote(null); // Reset edit state
+        setEditContent(""); // Clear edit input field
+      } else {
+        console.error("Failed to update note:", data.message);
+      }
     } catch (error) {
       console.error("Error editing note:", error);
     }
   }
+  
 
   return (
     <div>
