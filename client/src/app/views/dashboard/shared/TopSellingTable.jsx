@@ -158,6 +158,9 @@ export default function TopSellingTable() {
               <TableCell colSpan={4} sx={{ px: 3 }}>
                 Company Name
               </TableCell>
+              <TableCell colSpan={2} sx={{ px: 0 }}>
+                Applied
+              </TableCell>
 
               <TableCell colSpan={2} sx={{ px: 0 }}>
                 Position
@@ -181,6 +184,9 @@ export default function TopSellingTable() {
                     <Avatar src={product.imgUrl} />
                     <Paragraph>{product.name}</Paragraph>
                   </Box>
+                </TableCell>
+                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
+                  <Paragraph>{product.applied}</Paragraph>
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
@@ -215,30 +221,35 @@ export const productList = [
   {
     imgUrl: "https://logo.clearbit.com/google.com",
     name: "Google",
+    applied: "2024-03-01",
     position: "SDE I",
     status: "applied"
   },
   {
     imgUrl: "https://logo.clearbit.com/facebook.com",
     name: "Facebook",
+    applied: "2024-03-05",
     position: "SDE II",
     status: "interview"
   },
   {
     imgUrl: "https://logo.clearbit.com/amazon.com",
     name: "Amazon",
+    applied: "2024-03-10",
     position: "Senior SDE",
     status: "interview"
   },
   {
     imgUrl: "https://logo.clearbit.com/meta.com",
     name: "Meta",
+    applied: "2024-03-15",
     position: "SDE III",
     status: "rejected"
   },
   {
     imgUrl: "https://logo.clearbit.com/netflix.com",
     name: "Netflix",
+    applied: "2024-02-20",
     position: "Principal SDE",
     status: "applied"
   }

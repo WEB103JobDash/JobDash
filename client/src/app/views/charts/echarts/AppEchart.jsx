@@ -3,8 +3,6 @@ import { Box, styled, useTheme } from "@mui/material";
 import Breadcrumb from "app/components/Breadcrumb";
 import SimpleCard from "app/components/SimpleCard";
 
-import AreaChart from "./AreaChart";
-import LineChart from "./LineChart";
 import DoughnutChart from "./Doughnut";
 import ComparisonChart from "./ComparisonChart";
 
@@ -37,14 +35,6 @@ export default function AppEchart() {
 
       <Box sx={{ py: "12px" }} />
 
-      <SimpleCard title="Line Chart">
-        <LineChart
-          height="350px"
-          color={[theme.palette.primary.main, theme.palette.primary.light]}
-        />
-      </SimpleCard>
-
-      <Box sx={{ py: "12px" }} />
 
       <SimpleCard title="Comparison Chart">
         <ComparisonChart

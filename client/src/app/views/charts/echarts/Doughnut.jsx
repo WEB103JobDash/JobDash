@@ -16,10 +16,22 @@ export default function DoughnutChart({ height, color = [] }) {
   // Function to count occurrences of each unique value in the selected field
   const getCounts = (field) => {
     return productList.reduce((acc, item) => {
-      acc[item[field]] = (acc[item[field]] || 0) + 1;
+      // If the field is "status," count all as "applied" while tracking specific statuses
+      if (field === "status") {
+        acc["applied"] = (acc["applied"] || 0) + 1;
+        if (item.status === "interview") {
+          acc["interview"] = (acc["interview"] || 0) + 1;
+        } else if (item.status === "rejected") {
+          acc["rejected"] = (acc["rejected"] || 0) + 1;
+        }
+      } else {
+        // Otherwise, count the values normally
+        acc[item[field]] = (acc[item[field]] || 0) + 1;
+      }
       return acc;
     }, {});
   };
+  
 
   
   const counts = getCounts(selectedField);
