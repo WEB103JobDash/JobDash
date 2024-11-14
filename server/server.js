@@ -39,6 +39,7 @@ app.get('/api-test', async (req, res) => {
     }
 });
 
+// FOR APPLICATION DETAILS
 // Endpoint to get job application's details by specific ID
 app.get("/api/applications-details/:id", async (req, res) => {
     try {
@@ -56,6 +57,7 @@ app.get("/api/applications-details/:id", async (req, res) => {
     }
 });
 
+// NOTES
 // Endpoint to get notes for a specific job application
 app.get("/api/notes/:id", async (req, res) => {
     try {
@@ -69,9 +71,51 @@ app.get("/api/notes/:id", async (req, res) => {
   
       // Return the notes as JSON
       res.json(result.rows);
-      console.log(res.json(result.rows));
     } catch (error) {
       console.error("Error fetching notes:", error);
+      res.status(500).send("Server error");
+    }
+  });
+  
+  // POST: Create a new note
+app.post("/api/notes", async (req, res) => {
+    const { application_id, note_content } = req.body;
+    try {
+      const result = await pool.query(
+        "INSERT INTO notes (application_id, note_content) VALUES ($1, $2) RETURNING *",
+        [application_id, note_content]
+      );
+      res.json(result.rows[0]); // Return the newly created note
+    } catch (error) {
+      console.error("Error adding note:", error);
+      res.status(500).send("Server error");
+    }
+  });
+  
+  // PUT: Update an existing note
+  app.put("/api/notes/:id", async (req, res) => {
+    const noteId = req.params.id;
+    const { note_content } = req.body;
+    try {
+      const result = await pool.query(
+        "UPDATE notes SET content = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
+        [note_content, noteId]
+      );
+      res.json(result.rows[0]); // Return the updated note
+    } catch (error) {
+      console.error("Error updating note:", error);
+      res.status(500).send("Server error");
+    }
+  });
+  
+  // DELETE: Delete a note
+  app.delete("/api/notes/:id", async (req, res) => {
+    const noteId = req.params.id;
+    try {
+      await pool.query("DELETE FROM notes WHERE id = $1", [noteId]);
+      res.status(204).send(); // Return no content on successful deletion
+    } catch (error) {
+      console.error("Error deleting note:", error);
       res.status(500).send("Server error");
     }
   });
