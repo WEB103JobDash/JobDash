@@ -1,0 +1,30 @@
+/* SearchBar.css */
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-icon {
+    margin-right: 10px;
+    color: #666;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    background: transparent;
+    font-size: 16px;
+    color: black;
+}
+
+.search-bar input::placeholder {
+    color: #000000;
+}

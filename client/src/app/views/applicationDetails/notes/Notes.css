@@ -1,0 +1,76 @@
+/* General styles for the Notes component */
+.notes-container {
+  padding: 20px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.new-note-form, .edit-note-form {
+  margin-bottom: 20px;
+}
+
+.note-input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  padding: 10px 15px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+}
+
+.delete-btn {
+  background-color: #FF0000;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.edit-btn {
+  background-color: #28a745;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.notes-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.note-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+.note-content {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.note-item p {
+  margin: 5px 0;
+}
