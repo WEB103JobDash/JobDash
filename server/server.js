@@ -80,10 +80,13 @@ app.get("/api/notes/:id", async (req, res) => {
   // POST: Create a new note
 app.post("/api/notes", async (req, res) => {
     const { application_id, note_content } = req.body;
+    const created_at = new Date();  // Get the current timestamp
+    const updated_at = new Date();  // Initially, the created and updated times are the same
+
     try {
       const result = await pool.query(
-        "INSERT INTO notes (application_id, note_content) VALUES ($1, $2) RETURNING *",
-        [application_id, note_content]
+        "INSERT INTO notes (application_id, note_content, created_at, updated_at) VALUES ($1, $2,  $3, $4) RETURNING *",
+        [application_id, note_content, created_at, updated_at]
       );
       res.json(result.rows[0]); // Return the newly created note
     } catch (error) {
@@ -96,6 +99,7 @@ app.post("/api/notes", async (req, res) => {
   app.put("/api/notes/:id", async (req, res) => {
     const noteId = req.params.id;
     const { note_content } = req.body;
+    const updated_at = new Date();  // Get the current timestamp for updated_at
   
     if (!note_content) {
       return res.status(400).json({ message: "Note content is required" });
@@ -104,8 +108,8 @@ app.post("/api/notes", async (req, res) => {
     try {
       // Assuming you're using an SQL database, update the note here
       const result = await pool.query(
-        "UPDATE notes SET note_content = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
-        [note_content, noteId]
+        "UPDATE notes SET note_content = $1, updated_at = $2 WHERE id = $3 RETURNING *",
+        [note_content, updated_at, noteId]
       );
   
       if (result.rows.length === 0) {

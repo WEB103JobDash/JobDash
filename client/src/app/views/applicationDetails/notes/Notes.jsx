@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import './Notes.css';
 
 function Notes() {
   const { id } = useParams(); // Get the application id from the URL
@@ -54,10 +55,9 @@ function Notes() {
     }
   }
 
-// Handle note editing
-async function handleEditNote() {
+  // Handle note editing
+  async function handleEditNote() {
     if (!editContent.trim()) return; // Don't update with empty content
-    console.log("Saving note with content:", editContent);  // Log content to check
     try {
       const response = await fetch(`http://localhost:5000/api/notes/${editNote.id}`, {
         method: "PUT",
@@ -66,14 +66,13 @@ async function handleEditNote() {
         },
         body: JSON.stringify({ note_content: editContent }),
       });
-  
+
       const data = await response.json();
-      console.log("Response data:", data); // Log response from server
-  
+
       if (response.ok) {
         setNotes((prevNotes) =>
           prevNotes.map((note) =>
-            note.id === data.id ? { ...note, note_content: data.note_content } : note
+            note.id === data.id ? { ...note, note_content: data.note_content, updated_at: data.updated_at } : note
           )
         );
         setEditNote(null); // Reset edit state
@@ -85,32 +84,33 @@ async function handleEditNote() {
       console.error("Error editing note:", error);
     }
   }
-  
 
   return (
-    <div>
+    <div className="notes-container">
       <h3>Notes for this Application</h3>
 
       {/* Add new note form */}
-      <div>
+      <div className="new-note-form">
         <textarea
+          className="note-input"
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
           placeholder="Add a new note..."
         />
-        <button onClick={handleAddNote}>Add Note</button>
+        <button className="btn" onClick={handleAddNote}>Add Note</button>
       </div>
 
       {/* Edit note form (only when a note is being edited) */}
       {editNote && (
-        <div>
+        <div className="edit-note-form">
           <textarea
+            className="note-input"
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             placeholder="Edit your note..."
           />
-          <button onClick={handleEditNote}>Save Changes</button>
-          <button onClick={() => setEditNote(null)}>Cancel Edit</button>
+          <button className="btn" onClick={handleEditNote}>Save Changes</button>
+          <button className="btn cancel-btn" onClick={() => setEditNote(null)}>Cancel Edit</button>
         </div>
       )}
 
@@ -118,10 +118,10 @@ async function handleEditNote() {
       {notes.length === 0 ? (
         <p>No notes available for this application.</p>
       ) : (
-        <ul>
+        <ul className="notes-list">
           {notes.map((note) => (
-            <li key={note.id}>
-              <p>{note.note_content}</p>
+            <li key={note.id} className="note-item">
+              <p className="note-content">{note.note_content}</p>
               <p>
                 <strong>Created At:</strong>{" "}
                 {new Date(note.created_at).toLocaleString()}
@@ -130,8 +130,8 @@ async function handleEditNote() {
                 <strong>Updated At:</strong>{" "}
                 {new Date(note.updated_at).toLocaleString()}
               </p>
-              <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
-              <button onClick={() => {
+              <button className="btn delete-btn" onClick={() => handleDeleteNote(note.id)}>Delete</button>
+              <button className="btn edit-btn" onClick={() => {
                 setEditNote(note); // Set the note to be edited
                 setEditContent(note.note_content); // Pre-fill the textarea with current content
               }}>Edit</button>

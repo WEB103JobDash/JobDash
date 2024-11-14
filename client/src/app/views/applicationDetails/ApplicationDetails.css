@@ -1,0 +1,46 @@
+.application-details {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.application-title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.application-logo {
+  max-width: 100px;
+  margin-bottom: 20px;
+}
+
+.application-info {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.notes-section {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading, .error, .no-application {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.loading {
+  color: blue;
+}
+
+.error {
+  color: red;
+}
+
+.no-application {
+  color: #777;
+}
