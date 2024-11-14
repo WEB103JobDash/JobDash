@@ -4,7 +4,7 @@ import styled from "@mui/material/styles/styled";
 // STYLED COMPONENTS
 const CardRoot = styled(Card)({
   height: "100%",
-  padding: "20px 24px",
+  padding: "20px 24px 40px 24px",
   ".subtitle": { marginBottom: "1rem" }
 });
 
