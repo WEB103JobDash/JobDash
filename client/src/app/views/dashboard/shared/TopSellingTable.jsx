@@ -159,6 +159,9 @@ export default function TopSellingTable() {
               <TableCell colSpan={4} sx={{ px: 3 }}>
                 Company Name
               </TableCell>
+              <TableCell colSpan={2} sx={{ px: 0 }}>
+                Applied
+              </TableCell>
 
               <TableCell colSpan={2} sx={{ px: 0 }}>
                 Position
@@ -185,6 +188,9 @@ export default function TopSellingTable() {
                       <Paragraph>{product.name}</Paragraph>
                     </Box>
                   </Link>
+                </TableCell>
+                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
+                  <Paragraph>{product.applied}</Paragraph>
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
@@ -215,11 +221,12 @@ export default function TopSellingTable() {
   );
 }
 
-const productList = [
+export const productList = [
   {
     id: 1,
     imgUrl: "https://logo.clearbit.com/google.com",
     name: "Google",
+    applied: "2024-03-01",
     position: "SDE I",
     status: "applied"
   },
@@ -227,6 +234,7 @@ const productList = [
     id: 2,
     imgUrl: "https://logo.clearbit.com/facebook.com",
     name: "Facebook",
+    applied: "2024-03-05",
     position: "SDE II",
     status: "interview"
   },
@@ -234,6 +242,7 @@ const productList = [
     id: 3,
     imgUrl: "https://logo.clearbit.com/amazon.com",
     name: "Amazon",
+    applied: "2024-03-10",
     position: "Senior SDE",
     status: "interview"
   },
@@ -241,6 +250,7 @@ const productList = [
     id: 4,
     imgUrl: "https://logo.clearbit.com/meta.com",
     name: "Meta",
+    applied: "2024-03-15",
     position: "SDE III",
     status: "rejected"
   },
@@ -248,6 +258,7 @@ const productList = [
     id: 5,
     imgUrl: "https://logo.clearbit.com/netflix.com",
     name: "Netflix",
+    applied: "2024-02-20",
     position: "Principal SDE",
     status: "applied"
   }
