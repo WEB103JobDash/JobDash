@@ -29,7 +29,7 @@ const routes = [
       // dashboard route
       { path: "/dashboard/default", element: <Analytics />, auth: authRoles.admin },
       // e-chart route
-      { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor },
+      { path: "/analytics", element: <AppEchart />, auth: authRoles.editor },
        // application details route with dynamic ID
        { path: "/application-details/:id", element: <ApplicationDetails />, auth: authRoles.user },
     ]
