@@ -1,10 +1,11 @@
 {
   "name": "jobdash",
+  "type": "module",
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run start\" \"npm run client\""
   },
@@ -21,5 +22,8 @@
     "path": "^0.12.7",
     "pg": "^8.13.1",
     "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

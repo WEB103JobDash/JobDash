@@ -1,13 +1,25 @@
 import express from 'express';
 import cors from 'cors';  // Import cors
-import path from 'path';
+// import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
 import favicon from 'serve-favicon';
 import dotenv from 'dotenv';
 import pool from './config/database.js'; // Your database connection
 // import routes here
 
 // Load environment variables
-dotenv.config({ path: './config/.env' });
+// dotenv.config({ path: './config/.env' });
+
+// Resolve __dirname equivalent in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+// Load .env file from the correct path relative to the server folder
+dotenv.config({ path: `${__dirname}/config/.env` });
+
+
+console.log('Loaded environment variables:', process.env.DATABASE_URL); // Log to verify
 
 const PORT = process.env.PORT || 5000;
 
