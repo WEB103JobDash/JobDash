@@ -196,4 +196,3 @@ export const deleteNote = async (noteId) => {
     throw error;
   }
 };
-
