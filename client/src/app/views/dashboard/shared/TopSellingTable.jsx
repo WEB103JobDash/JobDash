@@ -110,12 +110,12 @@ export default function TopSellingTable() {
 
   // Handle status change (cycle through statuses)
   const handleStatusChange = async (applicationId) => {
-    const statusCycle = ["applied", "interview", "rejected"];
+    const statusCycle = ["applied", "interview", "rejected", "offer", "accepted"];
     const product = jobApps.find(p => p.id === applicationId);
     const currentStatusIndex = statusCycle.indexOf(product.status);
     const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; 
     const updatedStatus = statusCycle[nextStatusIndex];
-
+  
     try {
       await updateApplicationStatus(applicationId, updatedStatus);
       const updatedJobApps = jobApps.map(jobApp =>
@@ -126,6 +126,7 @@ export default function TopSellingTable() {
       console.log('Could not update application status from action button');
     }
   };
+  
 
   // Handle input change for new application form
   const handleInputChange = (e) => {
@@ -212,15 +213,6 @@ export default function TopSellingTable() {
       <Dialog open={openCreateModal} onClose={() => setOpenCreateModal(false)}>
         <DialogTitle>Add New Job Application</DialogTitle>
         <DialogContent>
-          {/* <TextField
-            label="App ID"
-            name="user_id"
-            value={newApplication.user_id}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            sx={{ mb: 2 }}
-          /> */}
           <TextField
             label="Company"
             name="company"
@@ -288,6 +280,8 @@ export default function TopSellingTable() {
             <MenuItem value="applied">Applied</MenuItem>
             <MenuItem value="interview">Interview</MenuItem>
             <MenuItem value="rejected">Rejected</MenuItem>
+            <MenuItem value="offer">Offer</MenuItem>
+            <MenuItem value="accepted">Accepted</MenuItem>
           </Select>
         </DialogContent>
         <DialogActions>
@@ -372,9 +366,16 @@ export default function TopSellingTable() {
                 </TableCell>
                 <TableCell align="left" colSpan={2} sx={{ px: 0 }}>{jobApp.position}</TableCell>
                 <TableCell align="left" colSpan={2} sx={{ px: 0 }}>
-                  <Small bgcolor={jobApp.status === "applied" ? bgSecondary : jobApp.status === "rejected" ? bgError : bgPrimary}>
+                <Small bgcolor={ 
+                    jobApp.status === "applied" ? bgSecondary : 
+                    jobApp.status === "interview" ? bgPrimary : 
+                    jobApp.status === "rejected" ? bgError : 
+                    jobApp.status === "offer" ? palette.warning.main : 
+                    jobApp.status === "accepted" ? palette.success.main : 
+                    bgSecondary 
+                  }>
                     {jobApp.status}
-                  </Small>
+                </Small>
                 </TableCell>
                 <TableCell sx={{ p: 1 }}>
                   <IconButton onClick={() => handleStatusChange(jobApp.id)}>

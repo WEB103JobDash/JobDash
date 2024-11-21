@@ -32,18 +32,17 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
   // Function to count occurrences of each unique value in the selected field
   const getCounts = (field) => {
     return jobApps.reduce((acc, item) => {
+      const value = field === "status" ? item.status : item[field];
+
+      // For status field, ensure we account for all statuses.
       if (field === "status") {
-        // Handle "status" field: count "applied," "interview," and "rejected"
-        acc["applied"] = (acc["applied"] || 0) + 1;
-        if (item.status === "interview") {
-          acc["interview"] = (acc["interview"] || 0) + 1;
-        } else if (item.status === "rejected") {
-          acc["rejected"] = (acc["rejected"] || 0) + 1;
+        if (value === "applied" || value === "interview" || value === "rejected" || value === "offer" || value === "accepted") {
+          acc[value] = (acc[value] || 0) + 1;
         }
       } else {
-        // Generic field counting (e.g., "company" or "position")
-        acc[item[field]] = (acc[item[field]] || 0) + 1;
+        acc[value] = (acc[value] || 0) + 1;
       }
+
       return acc;
     }, {});
   };
@@ -51,6 +50,7 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
   const counts = getCounts(selectedField);
   const labels = Object.keys(counts);
 
+  // Dynamically generate color for each segment
   const generateColors = (count) => {
     const colors = [];
     for (let i = 0; i < count; i++) {
