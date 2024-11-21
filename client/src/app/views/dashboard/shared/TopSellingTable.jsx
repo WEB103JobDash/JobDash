@@ -14,15 +14,18 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import { styled, useTheme } from "@mui/material/styles";
 import Edit from "@mui/icons-material/Edit";
-// import AddCircleIcon from "@mui/icons-material/AddCircle"; // For Add icon
+import AddCircleIcon from "@mui/icons-material/AddCircle"; // Add icon
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 import { Paragraph } from "app/components/Typography";
 import { 
   getJobApplications, 
   updateApplicationStatus,
-  createJobApplication,
-  updateJobApplication,
-  deleteJobApplication
- } from '../../../clientAPI';
+  createJobApplication, // API function for creating job application
+} from '../../../clientAPI';
 
 // STYLED COMPONENTS
 const CardHeader = styled(Box)(() => ({
@@ -70,27 +73,36 @@ export default function TopSellingTable() {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
-  // State for filtering and storing fetched applications
   const [filters, setFilters] = useState({
     companyName: '',
     position: '',
     status: '',
     sortBy: ''
   });
-  
+
   const [jobApps, setJobApps] = useState([]);
+  const [openCreateModal, setOpenCreateModal] = useState(false); // Modal visibility
+  const [newApplication, setNewApplication] = useState({
+    company: '',
+    date_applied: '',
+    pay: '',
+    status: '',
+    location: '',
+    tech_stack: '',
+    position: ''
+  });
 
   // Fetch job applications from the database
   useEffect(() => {
     const fetchApplications = async () => {
       try {
         const data = await getJobApplications();
-        setJobApps(data); // Assuming `setJobApps` is your state setter for job applications
+        setJobApps(data);
       } catch (error) {
         console.error("Error fetching job applications:", error);
       }
     };
-  
+
     fetchApplications();
   }, []);
 
@@ -99,24 +111,56 @@ export default function TopSellingTable() {
     const statusCycle = ["applied", "interview", "rejected"];
     const product = jobApps.find(p => p.id === applicationId);
     const currentStatusIndex = statusCycle.indexOf(product.status);
-    const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; // Cycle through the statuses
+    const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; 
     const updatedStatus = statusCycle[nextStatusIndex];
 
     try {
       await updateApplicationStatus(applicationId, updatedStatus);
-
-      // Update the status in UI
       const updatedJobApps = jobApps.map(jobApp =>
         jobApp.id === applicationId ? { ...jobApp, status: updatedStatus } : jobApp
       );
       setJobApps(updatedJobApps);
-
     } catch (error) {
-      console.log('could not update applic status from action button');
+      console.log('Could not update application status from action button');
     }
   };
 
-  // Filter job applications
+  // Handle input change for new application form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewApplication(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  // Handle new application form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const createdApplication = await createJobApplication(newApplication);
+
+      // Add the new application to the state
+      setJobApps(prevApps => [...prevApps, createdApplication]);
+
+      // Close the modal and reset the form
+      setOpenCreateModal(false);
+      setNewApplication({
+        company: '',
+        date_applied: '',
+        pay: '',
+        status: '',
+        location: '',
+        tech_stack: '',
+        position: ''
+      });
+    } catch (error) {
+      console.error("Error creating job application:", error);
+    }
+  };
+
+  // Filter and sort job applications (same as before)
   const filteredJobApps = jobApps.filter(jobApp => {
     return (
       jobApp?.company?.toLowerCase().includes(filters.companyName.toLowerCase()) &&
@@ -125,12 +169,11 @@ export default function TopSellingTable() {
     );
   });
 
-  // Sorting logic
   const sortedJobApps = [...filteredJobApps].sort((a, b) => {
     if (filters.sortBy === 'asc') {
-      return a.company.localeCompare(b.company); // Sort by company name (ascending)
+      return a.company.localeCompare(b.company);
     } else if (filters.sortBy === 'desc') {
-      return b.company.localeCompare(a.company); // Sort by company name (descending)
+      return b.company.localeCompare(a.company);
     }
     return 0;
   });
@@ -139,12 +182,104 @@ export default function TopSellingTable() {
     <Card elevation={3} sx={{ pt: "20px", mb: 3 }}>
       <CardHeader>
         <Title>Applications</Title>
-        <Select size="small" defaultValue="this_month">
-          <MenuItem value="this_month">This Month</MenuItem>
-          <MenuItem value="last_month">Last Month</MenuItem>
-        </Select>
+        <IconButton color="primary" onClick={() => setOpenCreateModal(true)}>
+          <AddCircleIcon />
+        </IconButton>
       </CardHeader>
 
+      {/* Modal for adding a new job application */}
+      <Dialog open={openCreateModal} onClose={() => setOpenCreateModal(false)}>
+        <DialogTitle>Add New Job Application</DialogTitle>
+        <DialogContent>
+          {/* <TextField
+            label="App ID"
+            name="user_id"
+            value={newApplication.user_id}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          /> */}
+          <TextField
+            label="Company"
+            name="company"
+            value={newApplication.company}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Date Applied"
+            name="date_applied"
+            type="date"
+            value={newApplication.date_applied}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Pay"
+            name="pay"
+            value={newApplication.pay}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Location"
+            name="location"
+            value={newApplication.location}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Tech Stack"
+            name="tech_stack"
+            value={newApplication.tech_stack}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Position"
+            name="position"
+            value={newApplication.position}
+            onChange={handleInputChange}
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+          />
+          <Select
+            label="Status"
+            name="status"
+            value={newApplication.status}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            <MenuItem value="applied">Applied</MenuItem>
+            <MenuItem value="interview">Interview</MenuItem>
+            <MenuItem value="rejected">Rejected</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenCreateModal(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Filter Controls */}
       <Box display="flex" justifyContent="space-between" p={2}>
         <Select
           label="Sort by"
@@ -188,6 +323,7 @@ export default function TopSellingTable() {
         </Select>
       </Box>
 
+      {/* Table with job applications */}
       <Box overflow="auto">
         <ProductTable>
           <TableHead>
@@ -196,10 +332,9 @@ export default function TopSellingTable() {
               <TableCell colSpan={2} sx={{ px: 0 }}>Applied</TableCell>
               <TableCell colSpan={2} sx={{ px: 0 }}>Position</TableCell>
               <TableCell colSpan={2} sx={{ px: 0 }}>Status</TableCell>
-              <TableCell colSpan={1} sx={{ px: 0 }}>Action</TableCell>
+              <TableCell colSpan={1} sx={{ px: 0 }}>Toggle</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {sortedJobApps.map((jobApp) => (
               <TableRow key={jobApp.id} hover>
