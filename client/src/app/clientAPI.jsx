@@ -1,6 +1,6 @@
 const API_BASE_URL = "http://localhost:5000/api"; // Base URL for the API
 
-// --- Applications API --
+// --- Application's details API --
 
 // Fetch application details by ID
 export const getApplicationDetails = async (id) => {

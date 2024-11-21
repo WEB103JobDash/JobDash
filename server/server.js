@@ -138,25 +138,6 @@ app.post("/api/notes", async (req, res) => {
   });
 
   
-//   app.put("/api/notes/:id", async (req, res) => {
-//     const noteId = req.params.id;
-//     const { note_content } = req.body;
-//     try {
-//       const result = await pool.query(
-//         "UPDATE notes SET content = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
-//         [note_content, noteId]
-//       );
-
-//       if (result.rows.length === 0) {
-//         return res.status(404).json({ message: "Note not found" });
-//       }
-
-//       res.json(result.rows[0]); // Return the updated note
-//     } catch (error) {
-//       console.error("Error updating note:", error);
-//       res.status(500).send("Server error");
-//     }
-//   });
   
   // DELETE: Delete a note
   app.delete("/api/notes/:id", async (req, res) => {
