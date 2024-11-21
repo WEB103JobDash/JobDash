@@ -69,12 +69,12 @@ app.get("/api/applications-details/:id", async (req, res) => {
 
 // Create a new job application (this can be used for adding applications)
 app.post("/api/job-applications", async (req, res) => {
-    const { company_name, position, status, date_applied, notes } = req.body;
+    const { company, position, status, date_applied, pay, location, tech_stack} = req.body;
 
     try {
         const result = await pool.query(
-            "INSERT INTO job_app_details (company_name, position, status, date_applied, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [company_name, position, status, date_applied, notes]
+            "INSERT INTO job_app_details (company, position, status, date_applied, pay, location, tech_stack) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [company, position, status, date_applied, pay, location, tech_stack]
         );
         res.status(201).json(result.rows[0]); // Return the newly created job application
     } catch (error) {
