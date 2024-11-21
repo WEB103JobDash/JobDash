@@ -1,21 +1,40 @@
 import { useTheme } from "@mui/material/styles";
-import { productList } from "app/views/dashboard/shared/TopSellingTable";
-import { useState } from "react";
+// import { productList } from "app/views/dashboard/shared/TopSellingTable";
+import { useState , useEffect} from "react";
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { getJobApplications } from '../../../clientAPI';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
+
 export default function DoughnutChart({ height, color = [] }) {
   const theme = useTheme();
+
+  const [jobApps, setJobApps] = useState([]);
+
+  // Fetch job applications from the database
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const data = await getJobApplications();
+        setJobApps(data); // Assuming `setJobApps` is your state setter for job applications
+      } catch (error) {
+        console.error("Error fetching job applications:", error);
+      }
+    };
+  
+    fetchApplications();
+  }, []);
 
   const [selectedField, setSelectedField] = useState("status");
 
   // Function to count occurrences of each unique value in the selected field
   const getCounts = (field) => {
-    return productList.reduce((acc, item) => {
+    return jobApps.reduce((acc, item) => {
       // If the field is "status," count all as "applied" while tracking specific statuses
       if (field === "status") {
         acc["applied"] = (acc["applied"] || 0) + 1;
