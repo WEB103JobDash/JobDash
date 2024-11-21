@@ -44,3 +44,23 @@
 .no-application {
   color: #777;
 }
+
+.button-container {
+  margin-top: 20px;
+}
+
+.edit-button, .delete-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #4CAF50; /* Green for Edit */
+  color: white;
+}
+
+.delete-button {
+  background-color: #f44336; /* Red for Delete */
+  color: white;
+}

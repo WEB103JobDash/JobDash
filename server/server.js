@@ -69,12 +69,12 @@ app.get("/api/applications-details/:id", async (req, res) => {
 
 // Create a new job application (this can be used for adding applications)
 app.post("/api/job-applications", async (req, res) => {
-    const { company, position, status, date_applied, pay, location, tech_stack } = req.body;
+    const { company_name, position, status, date_applied, notes } = req.body;
 
     try {
         const result = await pool.query(
-            "INSERT INTO job_app_details (company, position, status, date_applied, pay, location, tech_stack ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [company, position, status, date_applied, pay, location, tech_stack]
+            "INSERT INTO job_app_details (company_name, position, status, date_applied, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [company_name, position, status, date_applied, notes]
         );
         res.status(201).json(result.rows[0]); // Return the newly created job application
     } catch (error) {
@@ -85,25 +85,26 @@ app.post("/api/job-applications", async (req, res) => {
 
 // Update job application details
 app.put("/api/job-applications/:id", async (req, res) => {
-    const { id } = req.params;
-    const { company, position, status, date_applied } = req.body;
+  const { id } = req.params;
+  const { company, position, status, date_applied, pay, location, tech_stack } = req.body;
 
-    try {
-        const result = await pool.query(
-            "UPDATE job_app_details SET company = $1, position = $2, status = $3, date_applied = $4, WHERE id = $5 RETURNING *",
-            [company, position, status, date_applied, id]
-        );
+  try {
+      const result = await pool.query(
+          "UPDATE job_app_details SET company = $1, position = $2, status = $3, date_applied = $4, pay = $5, location = $6, tech_stack = $7 WHERE id = $8 RETURNING *",
+          [company, position, status, date_applied, pay, location, tech_stack, id]
+      );
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: "Application not found" });
-        }
+      if (result.rows.length === 0) {
+          return res.status(404).json({ message: "Application not found" });
+      }
 
-        res.json(result.rows[0]); // Return the updated application
-    } catch (error) {
-        console.error("Error updating job application:", error);
-        res.status(500).send("Server error");
-    }
+      res.json(result.rows[0]); // Return the updated application
+  } catch (error) {
+      console.error("Error updating job application:", error);
+      res.status(500).send("Server error");
+  }
 });
+
 
 // Delete a job application
 app.delete("/api/job-applications/:id", async (req, res) => {
