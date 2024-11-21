@@ -27,5 +27,8 @@ export default defineConfig({
       changeOrigin: true,
       secure: false,
     }
+  },
+  optimizeDeps:{
+    exclude:['@babel/runtime']
   }
 });
