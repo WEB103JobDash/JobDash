@@ -51,6 +51,24 @@ app.get('/api-test', async (req, res) => {
     }
 });
 
+
+// FOR ALL APPLICATIONS TO DISPLAY ON DASHBOARD
+app.get("/api/job-applications", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM job_app_details");
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "No applications found" });
+    }
+
+    res.json(result.rows); // Return all applications
+  } catch (error) {
+    console.error("Error fetching job applications:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+
 // FOR APPLICATION DETAILS
 // Endpoint to get job application's details by specific ID
 app.get("/api/applications-details/:id", async (req, res) => {

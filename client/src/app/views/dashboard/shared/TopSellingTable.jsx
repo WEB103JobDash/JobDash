@@ -1,271 +1,4 @@
-// import React, { useState } from "react";
-// import { Link } from "react-router-dom"; // Import Link
-// import Box from "@mui/material/Box";
-// import Card from "@mui/material/Card";
-// import Table from "@mui/material/Table";
-// import Select from "@mui/material/Select";
-// import Avatar from "@mui/material/Avatar";
-// import TableRow from "@mui/material/TableRow";
-// import MenuItem from "@mui/material/MenuItem";
-// import TableBody from "@mui/material/TableBody";
-// import TableCell from "@mui/material/TableCell";
-// import TableHead from "@mui/material/TableHead";
-// import IconButton from "@mui/material/IconButton";
-// import TextField from "@mui/material/TextField";
-// import { styled, useTheme } from "@mui/material/styles";
-// import Edit from "@mui/icons-material/Edit";
-// import { Paragraph } from "app/components/Typography";
-
-// // STYLED COMPONENTS
-// const CardHeader = styled(Box)(() => ({
-//   display: "flex",
-//   paddingLeft: "24px",
-//   paddingRight: "24px",
-//   marginBottom: "12px",
-//   alignItems: "center",
-//   justifyContent: "space-between"
-// }));
-
-// const Title = styled("span")(() => ({
-//   fontSize: "1rem",
-//   fontWeight: "500",
-//   textTransform: "capitalize"
-// }));
-
-// const ProductTable = styled(Table)(() => ({
-//   minWidth: 400,
-//   whiteSpace: "pre",
-//   "& small": {
-//     width: 50,
-//     height: 15,
-//     borderRadius: 500,
-//     boxShadow: "0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)"
-//   },
-//   "& td": { borderBottom: "none" },
-//   "& td:first-of-type": { paddingLeft: "16px !important" }
-// }));
-
-// const Small = styled("small")(({ bgcolor }) => ({
-//   width: 50,
-//   height: 15,
-//   color: "#fff",
-//   padding: "2px 8px",
-//   borderRadius: "4px",
-//   overflow: "hidden",
-//   background: bgcolor,
-//   boxShadow: "0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)"
-// }));
-
-// export default function TopSellingTable() {
-//   const { palette } = useTheme();
-//   const bgError = palette.error.main;
-//   const bgPrimary = palette.primary.main;
-//   const bgSecondary = palette.secondary.main;
-
-//   // filter states
-//   const [filters, setFilters] = useState({
-//     companyName: '',
-//     position: '',
-//     status: ''
-//   });
-
-//   // filter change handler
-//   const handleFilterChange = (field) => (event) => {
-//     setFilters({
-//       ...filters,
-//       [field]: event.target.value
-//     });
-//   };
-
-//   const filteredProductList = productList.filter(product => {
-//     return (
-//       product.name.toLowerCase().includes(filters.companyName.toLowerCase()) &&
-//       product.position.toLowerCase().includes(filters.position.toLowerCase()) &&
-//       (filters.status === '' || product.status === filters.status)
-//     );
-//   });
-
-//   // Sorting logic
-//   const sortedProductList = [...filteredProductList].sort((a, b) => {
-//     if (filters.sortBy === 'asc') {
-//       return a.name.localeCompare(b.name);
-//     } else if (filters.sortBy === 'desc') {
-//       return b.name.localeCompare(a.name);
-//     }
-//     return 0;
-//   });
-
-//   return (
-//     <Card elevation={3} sx={{ pt: "20px", mb: 3 }}>
-//       <CardHeader>
-//         <Title>Applications</Title>
-//         <Select size="small" defaultValue="this_month">
-//           <MenuItem value="this_month">This Month</MenuItem>
-//           <MenuItem value="last_month">Last Month</MenuItem>
-//         </Select>
-//       </CardHeader>
-
-//       <Box display="flex" justifyContent="space-between" p={2}>
-//         <Select
-//           label="Sort by"
-//           variant="outlined"
-//           size="small"
-//           value={filters.sortBy}
-//           onChange={handleFilterChange('sortBy')}
-//           displayEmpty
-//         >
-//           <MenuItem value="" disabled>
-//             Sort by
-//           </MenuItem>
-//           <MenuItem value="asc">Company (A-Z)</MenuItem>
-//           <MenuItem value="desc">Company (Z-A)</MenuItem>
-//         </Select>
-//         <TextField
-//           label="Company Name"
-//           variant="outlined"
-//           size="small"
-//           value={filters.companyName}
-//           onChange={handleFilterChange('companyName')}
-//         />
-//         <TextField
-//           label="Position"
-//           variant="outlined"
-//           size="small"
-//           value={filters.position}
-//           onChange={handleFilterChange('position')}
-//         />
-//         <Select
-//           label="Status"
-//           variant="outlined"
-//           size="small"
-//           value={filters.status}
-//           onChange={handleFilterChange('status')}
-//           displayEmpty
-//         >
-//           <MenuItem value="" disabled>
-//             Status
-//           </MenuItem>
-//           <MenuItem value="">All</MenuItem>
-//           <MenuItem value="applied">Applied</MenuItem>
-//           <MenuItem value="interview">Interview</MenuItem>
-//           <MenuItem value="rejected">Rejected</MenuItem>
-//         </Select>
-//       </Box>
-
-//       <Box overflow="auto">
-//         <ProductTable>
-//           <TableHead>
-//             <TableRow>
-//               <TableCell colSpan={4} sx={{ px: 3 }}>
-//                 Company Name
-//               </TableCell>
-//               <TableCell colSpan={2} sx={{ px: 0 }}>
-//                 Applied
-//               </TableCell>
-
-//               <TableCell colSpan={2} sx={{ px: 0 }}>
-//                 Position
-//               </TableCell>
-
-//               <TableCell colSpan={2} sx={{ px: 0 }}>
-//                 Status
-//               </TableCell>
-
-//               <TableCell colSpan={1} sx={{ px: 0 }}>
-//                 Action
-//               </TableCell>
-//             </TableRow>
-//           </TableHead>
-
-//           <TableBody>
-//             {sortedProductList.map((product, index) => (
-//               <TableRow key={index} hover>
-//                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: "capitalize" }}>
-//                 {/* Click to go to Application Details Page */}
-//                   <Link to={`/application-details/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-//                     <Box display="flex" alignItems="center" gap={4}>
-//                       <Avatar src={product.imgUrl} />
-//                       <Paragraph>{product.name}</Paragraph>
-//                     </Box>
-//                   </Link>
-//                 </TableCell>
-//                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
-//                   <Paragraph>{product.applied}</Paragraph>
-//                 </TableCell>
-
-//                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
-//                   <Paragraph>{product.position}</Paragraph>
-//                 </TableCell>
-
-//                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-//                   {product.status === "applied" ? (
-//                     <Small bgcolor={bgSecondary}>Applied</Small>
-//                   ) : product.status === "interview" ? (
-//                     <Small bgcolor={bgPrimary}>Interview</Small>
-//                   ) : (
-//                     <Small bgcolor={bgError}>Rejected</Small>
-//                   )}
-//                 </TableCell>
-
-//                 <TableCell sx={{ px: 0 }} colSpan={1}>
-//                   <IconButton>
-//                     <Edit color="primary" />
-//                   </IconButton>
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </ProductTable>
-//       </Box>
-//     </Card>
-//   );
-// }
-
-// export const productList = [
-//   {
-//     id: 1,
-//     imgUrl: "https://logo.clearbit.com/google.com",
-//     name: "Google",
-//     applied: "2024-03-01",
-//     position: "SDE I",
-//     status: "applied"
-//   },
-//   {
-//     id: 2,
-//     imgUrl: "https://logo.clearbit.com/facebook.com",
-//     name: "Facebook",
-//     applied: "2024-03-05",
-//     position: "SDE II",
-//     status: "interview"
-//   },
-//   {
-//     id: 3,
-//     imgUrl: "https://logo.clearbit.com/amazon.com",
-//     name: "Amazon",
-//     applied: "2024-03-10",
-//     position: "Senior SDE",
-//     status: "interview"
-//   },
-//   {
-//     id: 4,
-//     imgUrl: "https://logo.clearbit.com/meta.com",
-//     name: "Meta",
-//     applied: "2024-03-15",
-//     position: "SDE III",
-//     status: "rejected"
-//   },
-//   {
-//     id: 5,
-//     imgUrl: "https://logo.clearbit.com/netflix.com",
-//     name: "Netflix",
-//     applied: "2024-02-20",
-//     position: "Principal SDE",
-//     status: "applied"
-//   }
-// ];
-
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -282,6 +15,7 @@ import TextField from "@mui/material/TextField";
 import { styled, useTheme } from "@mui/material/styles";
 import Edit from "@mui/icons-material/Edit";
 import { Paragraph } from "app/components/Typography";
+import { getJobApplications } from '../../../clientAPI';
 
 // STYLED COMPONENTS
 const CardHeader = styled(Box)(() => ({
@@ -329,74 +63,70 @@ export default function TopSellingTable() {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
-  // filter states
+  // State for filtering and storing fetched applications
   const [filters, setFilters] = useState({
     companyName: '',
     position: '',
-    status: ''
+    status: '',
+    sortBy: ''
   });
+  
+  const [jobApps, setJobApps] = useState([]);
+  
+  // Fetch job applications from the database
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const data = await getJobApplications();
+        setJobApps(data); // Assuming `setJobApps` is your state setter for job applications
+      } catch (error) {
+        console.error("Error fetching job applications:", error);
+      }
+    };
+  
+    fetchApplications();
+    console.log(jobApps);
+  }, []);
 
-  const [productList, setProductList] = useState([
-    {
-      id: 1,
-      imgUrl: "https://logo.clearbit.com/google.com",
-      name: "Google",
-      applied: "2024-03-01",
-      position: "SDE I",
-      status: "applied"
-    },
-    {
-      id: 2,
-      imgUrl: "https://logo.clearbit.com/facebook.com",
-      name: "Facebook",
-      applied: "2024-03-05",
-      position: "SDE II",
-      status: "interview"
-    },
-    {
-      id: 3,
-      imgUrl: "https://logo.clearbit.com/amazon.com",
-      name: "Amazon",
-      applied: "2024-03-10",
-      position: "Senior SDE",
-      status: "interview"
-    },
-    {
-      id: 4,
-      imgUrl: "https://logo.clearbit.com/meta.com",
-      name: "Meta",
-      applied: "2024-03-15",
-      position: "SDE III",
-      status: "rejected"
-    },
-    {
-      id: 5,
-      imgUrl: "https://logo.clearbit.com/netflix.com",
-      name: "Netflix",
-      applied: "2024-02-20",
-      position: "Principal SDE",
-      status: "applied"
+  // Handle status change (cycle through statuses)
+  const handleStatusChange = async (productId) => {
+    const statusCycle = ["applied", "interview", "rejected"];
+    const product = jobApps.find(p => p.id === productId);
+    const currentStatusIndex = statusCycle.indexOf(product.status);
+    const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; // Cycle through the statuses
+    const updatedStatus = statusCycle[nextStatusIndex];
+
+    // Update the status in the database
+    try {
+      await fetch(`/api/job_app_details/${productId}`, { // Update API endpoint as per your setup
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ status: updatedStatus })
+      });
+
+      // Update the status in UI
+      const updatedJobApps = jobApps.map(jobApp =>
+        jobApp.id === productId ? { ...jobApp, status: updatedStatus } : jobApp
+      );
+      setJobApps(updatedJobApps);
+    } catch (error) {
+      console.error("Error updating status:", error);
     }
-  ]);
-
-  // filter change handler
-  const handleFilterChange = (field) => (event) => {
-    setFilters({
-      ...filters,
-      [field]: event.target.value
-    });
   };
 
-  const filteredProductList = productList.filter(product => {
+  // Filter logic
+  const filteredJobApps = jobApps.filter(jobApp => {
     return (
-      product.name.toLowerCase().includes(filters.companyName.toLowerCase()) &&
-      product.position.toLowerCase().includes(filters.position.toLowerCase()) &&
-      (filters.status === '' || product.status === filters.status)
+      jobApp?.name?.toLowerCase().includes(filters.companyName.toLowerCase()) &&
+      jobApp.position.toLowerCase().includes(filters.position.toLowerCase()) &&
+      (filters.status === '' || jobApp.status === filters.status)
     );
   });
 
   // Sorting logic
-  const sortedProductList = [...filteredProductList].sort((a, b) => {
+  const sortedJobApps = [...filteredJobApps].sort((a, b) => {
     if (filters.sortBy === 'asc') {
       return a.name.localeCompare(b.name);
     } else if (filters.sortBy === 'desc') {
@@ -404,20 +134,6 @@ export default function TopSellingTable() {
     }
     return 0;
   });
-
-   // Handle status change (cycle through statuses)
-   const handleStatusChange = (productId) => {
-    const statusCycle = ["applied", "interview", "rejected"];
-    const product = productList.find(p => p.id === productId);
-    const currentStatusIndex = statusCycle.indexOf(product.status);
-    const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; // Cycle through the statuses
-    const updatedStatus = statusCycle[nextStatusIndex];
-
-    const updatedProductList = productList.map(product =>
-      product.id === productId ? { ...product, status: updatedStatus } : product
-    );
-    setProductList(updatedProductList);
-  };
 
   return (
     <Card elevation={3} sx={{ pt: "20px", mb: 3 }}>
@@ -435,12 +151,10 @@ export default function TopSellingTable() {
           variant="outlined"
           size="small"
           value={filters.sortBy}
-          onChange={handleFilterChange('sortBy')}
+          onChange={e => setFilters({ ...filters, sortBy: e.target.value })}
           displayEmpty
         >
-          <MenuItem value="" disabled>
-            Sort by
-          </MenuItem>
+          <MenuItem value="" disabled>Sort by</MenuItem>
           <MenuItem value="asc">Company (A-Z)</MenuItem>
           <MenuItem value="desc">Company (Z-A)</MenuItem>
         </Select>
@@ -449,26 +163,24 @@ export default function TopSellingTable() {
           variant="outlined"
           size="small"
           value={filters.companyName}
-          onChange={handleFilterChange('companyName')}
+          onChange={e => setFilters({ ...filters, companyName: e.target.value })}
         />
         <TextField
           label="Position"
           variant="outlined"
           size="small"
           value={filters.position}
-          onChange={handleFilterChange('position')}
+          onChange={e => setFilters({ ...filters, position: e.target.value })}
         />
         <Select
           label="Status"
           variant="outlined"
           size="small"
           value={filters.status}
-          onChange={handleFilterChange('status')}
+          onChange={e => setFilters({ ...filters, status: e.target.value })}
           displayEmpty
         >
-          <MenuItem value="" disabled>
-            Status
-          </MenuItem>
+          <MenuItem value="" disabled>Status</MenuItem>
           <MenuItem value="">All</MenuItem>
           <MenuItem value="applied">Applied</MenuItem>
           <MenuItem value="interview">Interview</MenuItem>
@@ -480,60 +192,35 @@ export default function TopSellingTable() {
         <ProductTable>
           <TableHead>
             <TableRow>
-              <TableCell colSpan={4} sx={{ px: 3 }}>
-                Company Name
-              </TableCell>
-              <TableCell colSpan={2} sx={{ px: 0 }}>
-                Applied
-              </TableCell>
-
-              <TableCell colSpan={2} sx={{ px: 0 }}>
-                Position
-              </TableCell>
-
-              <TableCell colSpan={2} sx={{ px: 0 }}>
-                Status
-              </TableCell>
-
-              <TableCell colSpan={1} sx={{ px: 0 }}>
-                Action
-              </TableCell>
+              <TableCell colSpan={4} sx={{ px: 3 }}>Company Name</TableCell>
+              <TableCell colSpan={2} sx={{ px: 0 }}>Applied</TableCell>
+              <TableCell colSpan={2} sx={{ px: 0 }}>Position</TableCell>
+              <TableCell colSpan={2} sx={{ px: 0 }}>Status</TableCell>
+              <TableCell colSpan={1} sx={{ px: 0 }}>Action</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {sortedProductList.map((product, index) => (
-              <TableRow key={index} hover>
+            {jobApps.map((jobApp) => (
+              <TableRow key={jobApp.id} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: "capitalize" }}>
-                  {/* Click to go to Application Details Page */}
-                  <Link to={`/application-details/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                  <Link to={`/application-details/${jobApp.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                     <Box display="flex" alignItems="center" gap={4}>
-                      <Avatar src={product.imgUrl} />
-                      <Paragraph>{product.name}</Paragraph>
+                      <Avatar src={jobApp?.imgUrl} />
+                      <Paragraph>{jobApp.company}</Paragraph>
                     </Box>
                   </Link>
                 </TableCell>
-                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
-                  <Paragraph>{product.applied}</Paragraph>
+                <TableCell align="left" colSpan={2} sx={{ px: 0 }}>{jobApp.date_applied ? new Date(jobApp.date_applied).toLocaleDateString('en-US') : "N/A"}</TableCell>
+                <TableCell align="left" colSpan={2} sx={{ px: 0 }}>{jobApp.position}</TableCell>
+                <TableCell align="left" colSpan={2} sx={{ px: 0 }}>
+                  <Small bgcolor={jobApp.status === "applied" ? bgSecondary : jobApp.status === "rejected" ? bgError : bgPrimary}>
+                    {jobApp.status}
+                  </Small>
                 </TableCell>
-
-                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: "capitalize" }}>
-                  <Paragraph>{product.position}</Paragraph>
-                </TableCell>
-
-                <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {product.status === "applied" ? (
-                    <Small bgcolor={bgSecondary}>Applied</Small>
-                  ) : product.status === "interview" ? (
-                    <Small bgcolor={bgPrimary}>Interview</Small>
-                  ) : (
-                    <Small bgcolor={bgError}>Rejected</Small>
-                  )}
-                </TableCell>
-
-                <TableCell sx={{ px: 0 }} colSpan={1}>
-                  <IconButton onClick={() => handleStatusChange(product.id, product.status === 'applied' ? 'interview' : 'rejected')}>
-                    <Edit color="primary" />
+                <TableCell sx={{ p: 1 }}>
+                  <IconButton onClick={() => handleStatusChange(jobApp.id)}>
+                    <Edit sx={{ color: palette.primary.main }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
