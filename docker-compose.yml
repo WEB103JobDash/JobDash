@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile  # Path to the server Dockerfile
+    container_name: server
+    ports:
+      - "5000:5000"  # Expose server port
+    networks:
+      - my_network
+    working_dir: /app
+    command: ["npm", "start"]  # Start the server
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile  # Path to the client Dockerfile
+    container_name: client
+    ports:
+      - "5173:5173"  # Expose client port
+    networks:
+      - my_network
+    working_dir: /app
+    command: ["npm", "run", "dev"]  # Start the client in dev mode
+    depends_on:
+      - server  # Wait for the server to be up before starting the client
+
+networks:
+  my_network:
+    driver: bridge  # Use Docker's bridge network driver
