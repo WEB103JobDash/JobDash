@@ -4,30 +4,25 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { Button } from "@mui/material";
 import { getJobApplications } from "../../../clientAPI";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function DoughnutChart({ height = "400px", color = [] }) {
+export default function DoughnutChart({ height = "", color = [] }) {
   const theme = useTheme();
-
   const [jobApps, setJobApps] = useState([]);
+  const [selectedField, setSelectedField] = useState("status");
 
   // Fetch job applications from the database
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const data = await getJobApplications();
-        setJobApps(data || []); // Ensure `data` is always an array
-      } catch (error) {
-        console.error("Error fetching job applications:", error);
-      }
-    };
-
-    fetchApplications();
-  }, []);
-
-  const [selectedField, setSelectedField] = useState("status");
+  const fetchApplications = async () => {
+    try {
+      const data = await getJobApplications();
+      setJobApps(data || []); // Ensure `data` is always an array
+    } catch (error) {
+      console.error("Error fetching job applications:", error);
+    }
+  };
 
   // Function to count occurrences of each unique value in the selected field
   const getCounts = (field) => {
@@ -91,6 +86,11 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
     },
   };
 
+  // Use effect to fetch data initially when the component is first mounted
+  useEffect(() => {
+    fetchApplications(); // Initial fetch
+  }, []);
+
   return (
     <div style={{ height }}>
       <div>
@@ -107,7 +107,12 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
           <MenuItem value="position">Position</MenuItem>
         </Select>
       </div>
-      <Doughnut data={data} options={options} />
+      <div>
+        {/* still needs to be stylized <Button variant="contained" color="primary" onClick={fetchApplications} style={{ marginTop: "16px" }}>
+          Refresh Data
+        </Button> */}
+      </div>
+      <Doughnut data={data} options={options} height="500px"/>
     </div>
   );
 }

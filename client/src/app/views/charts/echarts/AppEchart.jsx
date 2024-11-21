@@ -22,7 +22,7 @@ export default function AppEchart() {
         <Breadcrumb routeSegments={[{ name: "Analytics" }]} />
       </Box>
 
-      <SimpleCard title="Doughnut Chart">
+      <SimpleCard height="600px" title="Doughnut Chart">
         <DoughnutChart
           height="350px"
           color={[
