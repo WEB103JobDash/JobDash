@@ -62,6 +62,8 @@ app.get("/api/applications-details/:id", async (req, res) => {
             return res.status(404).json({ message: "Application not found" });
         }
 
+       
+
         res.json(result.rows[0]);  // Return a single application object
     } catch (error) {
         console.error("Error fetching job application:", error);

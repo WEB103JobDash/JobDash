@@ -1,89 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import './Notes.css';
+import { getNotes, addNote, updateNote, deleteNote } from "../../../clientAPI"; // Import API functions
+import "./Notes.css";
 
-function Notes() {
-  const { id } = useParams(); // Get the application id from the URL
-  const [notes, setNotes] = useState([]); // State to hold notes data
-  const [newNote, setNewNote] = useState(""); // State for new note input
-  const [editNote, setEditNote] = useState(null); // State for editing a note
-  const [editContent, setEditContent] = useState(""); // State for edited content
+function Notes({ applicationId }) {
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState("");
+  const [editNote, setEditNote] = useState(null);
+  const [editContent, setEditContent] = useState("");
 
-  // Fetch notes from the server based on application id
   useEffect(() => {
-    async function fetchNotes() {
+    const fetchNotes = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/notes/${id}`);
-        const data = await response.json();
-        setNotes(data); // Set the fetched notes to state
+        const data = await getNotes(applicationId); // Fetch notes
+        setNotes(data);
       } catch (error) {
         console.error("Error fetching notes:", error);
       }
-    }
+    };
 
     fetchNotes();
-  }, [id]); // Re-run the effect when the application id changes
+  }, [applicationId]);
 
-  // Handle new note submission
-  async function handleAddNote() {
-    if (!newNote.trim()) return; // Don't add empty notes
+  const handleAddNote = async () => {
+    if (!newNote.trim()) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/notes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ application_id: id, note_content: newNote }),
-      });
-      const data = await response.json();
-      setNotes((prevNotes) => [...prevNotes, data]); // Add new note to the state
-      setNewNote(""); // Reset input field
+      const newNoteData = await addNote(applicationId, newNote); // Add new note
+      setNotes((prevNotes) => [...prevNotes, newNoteData]);
+      setNewNote("");
     } catch (error) {
       console.error("Error adding note:", error);
     }
-  }
+  };
 
-  // Handle note deletion
-  async function handleDeleteNote(noteId) {
+  const handleEditNote = async () => {
+    if (!editContent.trim()) return;
     try {
-      await fetch(`http://localhost:5000/api/notes/${noteId}`, {
-        method: "DELETE",
-      });
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId)); // Remove note from state
-    } catch (error) {
-      console.error("Error deleting note:", error);
-    }
-  }
-
-  // Handle note editing
-  async function handleEditNote() {
-    if (!editContent.trim()) return; // Don't update with empty content
-    try {
-      const response = await fetch(`http://localhost:5000/api/notes/${editNote.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ note_content: editContent }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setNotes((prevNotes) =>
-          prevNotes.map((note) =>
-            note.id === data.id ? { ...note, note_content: data.note_content, updated_at: data.updated_at } : note
-          )
-        );
-        setEditNote(null); // Reset edit state
-        setEditContent(""); // Clear edit input field
-      } else {
-        console.error("Failed to update note:", data.message);
-      }
+      const updatedNote = await updateNote(editNote.id, editContent); // Update note
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.id === updatedNote.id ? updatedNote : note
+        )
+      );
+      setEditNote(null);
+      setEditContent("");
     } catch (error) {
       console.error("Error editing note:", error);
     }
-  }
+  };
+
+  const handleDeleteNote = async (noteId) => {
+    try {
+      await deleteNote(noteId); // Delete note
+      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+    } catch (error) {
+      console.error("Error deleting note:", error);
+    }
+  };
+
+
 
   return (
     <div className="notes-container">
@@ -97,7 +71,9 @@ function Notes() {
           onChange={(e) => setNewNote(e.target.value)}
           placeholder="Add a new note..."
         />
-        <button className="btn" onClick={handleAddNote}>Add Note</button>
+        <button className="btn" onClick={handleAddNote}>
+          Add Note
+        </button>
       </div>
 
       {/* Edit note form (only when a note is being edited) */}
@@ -109,8 +85,12 @@ function Notes() {
             onChange={(e) => setEditContent(e.target.value)}
             placeholder="Edit your note..."
           />
-          <button className="btn" onClick={handleEditNote}>Save Changes</button>
-          <button className="btn cancel-btn" onClick={() => setEditNote(null)}>Cancel Edit</button>
+          <button className="btn" onClick={handleEditNote}>
+            Save Changes
+          </button>
+          <button className="btn cancel-btn" onClick={() => setEditNote(null)}>
+            Cancel Edit
+          </button>
         </div>
       )}
 
@@ -130,11 +110,18 @@ function Notes() {
                 <strong>Updated At:</strong>{" "}
                 {new Date(note.updated_at).toLocaleString()}
               </p>
-              <button className="btn delete-btn" onClick={() => handleDeleteNote(note.id)}>Delete</button>
-              <button className="btn edit-btn" onClick={() => {
-                setEditNote(note); // Set the note to be edited
-                setEditContent(note.note_content); // Pre-fill the textarea with current content
-              }}>Edit</button>
+              <button className="btn delete-btn" onClick={() => handleDeleteNote(note.id)}>
+                Delete
+              </button>
+              <button
+                className="btn edit-btn"
+                onClick={() => {
+                  setEditNote(note); // Set the note to be edited
+                  setEditContent(note.note_content); // Pre-fill the textarea with current content
+                }}
+              >
+                Edit
+              </button>
             </li>
           ))}
         </ul>
