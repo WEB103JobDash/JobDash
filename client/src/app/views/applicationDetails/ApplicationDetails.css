@@ -1,3 +1,4 @@
+/* General container for the application details page */
 .application-details {
   padding: 20px;
   background-color: #f9f9f9;
@@ -5,21 +6,25 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Application title (company name) */
 .application-title {
   font-size: 2rem;
   margin-bottom: 10px;
 }
 
+/* Company logo styling */
 .application-logo {
   max-width: 100px;
   margin-bottom: 20px;
 }
 
+/* Application information styling */
 .application-info {
   font-size: 1rem;
   margin: 5px 0;
 }
 
+/* Notes section styling */
 .notes-section {
   margin-top: 20px;
   background-color: #fff;
@@ -28,6 +33,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Loading, error, and no application styles */
 .loading, .error, .no-application {
   font-size: 1.2rem;
   color: #333;
@@ -45,14 +51,19 @@
   color: #777;
 }
 
+/* Button container styling */
 .button-container {
   margin-top: 20px;
 }
 
+/* Edit and delete buttons styling */
 .edit-button, .delete-button {
   padding: 10px 20px;
   margin-right: 10px;
   cursor: pointer;
+  border: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .edit-button {
@@ -60,7 +71,87 @@
   color: white;
 }
 
+.edit-button:hover {
+  background-color: #45a049;
+}
+
 .delete-button {
   background-color: #f44336; /* Red for Delete */
   color: white;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
+}
+
+/* Form styling for edit mode */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.edit-form h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.edit-form label {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.edit-form input {
+  margin-left: 10px;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.edit-form input:focus {
+  border-color: #4CAF50;
+}
+
+.edit-form .button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Save and cancel buttons */
+.save-button, .cancel-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #e53935;
 }
