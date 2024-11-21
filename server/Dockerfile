@@ -5,11 +5,11 @@ FROM node:16
 WORKDIR /app
 
 # Step 3: Copy the server's package.json and install dependencies
-COPY server/package.json ./
+COPY package.json ./
 RUN npm install
 
 # Step 4: Copy the server's source code into the container
-COPY server/ .
+COPY . .
 
 # Step 5: Expose the server's port
 EXPOSE 5000
