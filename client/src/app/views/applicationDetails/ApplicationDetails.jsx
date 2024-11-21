@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Notes from './notes/Notes';// Import Notes component
+import {
+  getApplicationDetails
+} from "../../clientAPI";
 import './ApplicationDetails.css';
 
 function ApplicationDetails() {
@@ -12,14 +15,12 @@ function ApplicationDetails() {
   useEffect(() => {
     const fetchApplicationDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/applications-details/${id}`);
-        
-        if (!response.ok) {
-          throw new Error("Failed to fetch application details");
-        }
+        const applicationData = await getApplicationDetails(id); // Fetch application details
+      //  console.log(applicationData);
+        setApplication(applicationData);
 
-        const data = await response.json();
-        setApplication(data);
+  
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -33,6 +34,8 @@ function ApplicationDetails() {
   if (loading) return <p>Loading application details...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  console.log('company', application.company);
+
   return application ? (
     <div className="application-details">
     <h1 className="application-title">{application.company}</h1>
@@ -44,11 +47,11 @@ function ApplicationDetails() {
     <p className="application-info"><strong>Location:</strong> {application.location || 'N/A'}</p>
     <p className="application-info"><strong>Pay:</strong> {application.pay || 'N/A'}</p>
     <p className="application-info"><strong>Tech Stack:</strong> {application.tech_stack || 'N/A'}</p>
-    <p className="application-info"><strong>Date Applied:</strong> {application.date_applied || 'N/A'}</p>
+    <p className="application-info"><strong>Date Applied:</strong> {new Date(application.date_applied).toLocaleDateString('en-US') || 'N/A'}</p>
 
     {/* Render Notes component */}
     <div className="notes-section">
-      <Notes />
+      <Notes applicationId={id} />
     </div>
   </div>
 ) : (

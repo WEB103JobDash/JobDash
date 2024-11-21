@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid2";
 import { styled, useTheme } from "@mui/material/styles";
 
 import StatCards from "./shared/StatCards";
-import DoughnutChart from "./shared/Doughnut";
+import DoughnutChart from "../charts/echarts/Doughnut";
 import TopSellingTable from "./shared/TopSellingTable";
 
 // STYLED COMPONENTS
