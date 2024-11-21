@@ -47,7 +47,7 @@ function ApplicationDetails() {
     <p className="application-info"><strong>Location:</strong> {application.location || 'N/A'}</p>
     <p className="application-info"><strong>Pay:</strong> {application.pay || 'N/A'}</p>
     <p className="application-info"><strong>Tech Stack:</strong> {application.tech_stack || 'N/A'}</p>
-    <p className="application-info"><strong>Date Applied:</strong> {application.date_applied || 'N/A'}</p>
+    <p className="application-info"><strong>Date Applied:</strong> {new Date(application.date_applied).toLocaleDateString('en-US') || 'N/A'}</p>
 
     {/* Render Notes component */}
     <div className="notes-section">

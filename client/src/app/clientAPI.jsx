@@ -172,6 +172,10 @@ export const getNotes = async (applicationId) => {
 
 // Add a new note for an application
 export const addNote = async (applicationId, noteContent) => {
+    if (!noteContent){
+        return;
+    }
+    
   try {
     const response = await fetch(`${API_BASE_URL}/notes`, {
       method: "POST",

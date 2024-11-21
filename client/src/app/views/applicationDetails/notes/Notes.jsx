@@ -22,7 +22,10 @@ function Notes({ applicationId }) {
   }, [applicationId]);
 
   const handleAddNote = async () => {
-    if (!newNote.trim()) return;
+    if (!newNote.trim()) {
+      alert('Can NOT add an EMPTY Note!');
+      return;
+    }
     try {
       const newNoteData = await addNote(applicationId, newNote); // Add new note
       setNotes((prevNotes) => [...prevNotes, newNoteData]);
@@ -104,11 +107,11 @@ function Notes({ applicationId }) {
               <p className="note-content">{note.note_content}</p>
               <p>
                 <strong>Created At:</strong>{" "}
-                {new Date(note.created_at).toLocaleString()}
+                {new Date(note.created_at).toLocaleDateString('en-US')}
               </p>
               <p>
                 <strong>Updated At:</strong>{" "}
-                {new Date(note.updated_at).toLocaleString()}
+                {new Date(note.updated_at).toLocaleDateString('en-US')}
               </p>
               <button className="btn delete-btn" onClick={() => handleDeleteNote(note.id)}>
                 Delete

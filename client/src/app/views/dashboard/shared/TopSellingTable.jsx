@@ -72,7 +72,7 @@ export default function TopSellingTable() {
   });
   
   const [jobApps, setJobApps] = useState([]);
-  
+
   // Fetch job applications from the database
   useEffect(() => {
     const fetchApplications = async () => {
@@ -85,7 +85,6 @@ export default function TopSellingTable() {
     };
   
     fetchApplications();
-    console.log(jobApps);
   }, []);
 
   // Handle status change (cycle through statuses)
@@ -98,7 +97,7 @@ export default function TopSellingTable() {
 
     try {
       await updateApplicationStatus(applicationId, updatedStatus);
-       
+
       // Update the status in UI
       const updatedJobApps = jobApps.map(jobApp =>
         jobApp.id === applicationId ? { ...jobApp, status: updatedStatus } : jobApp
@@ -108,24 +107,23 @@ export default function TopSellingTable() {
     } catch (error) {
       console.log('could not update applic status from action button');
     }
-  
   };
 
-  // Filter logic
+  // Filter job applications
   const filteredJobApps = jobApps.filter(jobApp => {
     return (
-      jobApp?.name?.toLowerCase().includes(filters.companyName.toLowerCase()) &&
-      jobApp.position.toLowerCase().includes(filters.position.toLowerCase()) &&
-      (filters.status === '' || jobApp.status === filters.status)
+      jobApp?.company?.toLowerCase().includes(filters.companyName.toLowerCase()) &&
+      jobApp?.position?.toLowerCase().includes(filters.position.toLowerCase()) &&
+      (filters.status === '' || jobApp?.status === filters.status)
     );
   });
 
   // Sorting logic
   const sortedJobApps = [...filteredJobApps].sort((a, b) => {
     if (filters.sortBy === 'asc') {
-      return a.name.localeCompare(b.name);
+      return a.company.localeCompare(b.company); // Sort by company name (ascending)
     } else if (filters.sortBy === 'desc') {
-      return b.name.localeCompare(a.name);
+      return b.company.localeCompare(a.company); // Sort by company name (descending)
     }
     return 0;
   });
@@ -196,7 +194,7 @@ export default function TopSellingTable() {
           </TableHead>
 
           <TableBody>
-            {jobApps.map((jobApp) => (
+            {sortedJobApps.map((jobApp) => (
               <TableRow key={jobApp.id} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: "capitalize" }}>
                   <Link to={`/application-details/${jobApp.id}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -206,7 +204,9 @@ export default function TopSellingTable() {
                     </Box>
                   </Link>
                 </TableCell>
-                <TableCell align="left" colSpan={2} sx={{ px: 0 }}>{jobApp.date_applied ? new Date(jobApp.date_applied).toLocaleDateString('en-US') : "N/A"}</TableCell>
+                <TableCell align="left" colSpan={2} sx={{ px: 0 }}>
+                  {jobApp.date_applied ? new Date(jobApp.date_applied).toLocaleDateString("en-US") : "N/A"}
+                </TableCell>
                 <TableCell align="left" colSpan={2} sx={{ px: 0 }}>{jobApp.position}</TableCell>
                 <TableCell align="left" colSpan={2} sx={{ px: 0 }}>
                   <Small bgcolor={jobApp.status === "applied" ? bgSecondary : jobApp.status === "rejected" ? bgError : bgPrimary}>
@@ -226,3 +226,4 @@ export default function TopSellingTable() {
     </Card>
   );
 }
+
