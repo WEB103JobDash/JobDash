@@ -5,6 +5,7 @@ import SimpleCard from "app/components/SimpleCard";
 
 import DoughnutChart from "./Doughnut";
 import ComparisonChart from "./ComparisonChart";
+import MyTimeline from "./Timeline";
 
 // STYLED COMPONENT
 const Container = styled("div")(({ theme }) => ({
@@ -42,6 +43,10 @@ export default function AppEchart() {
           color={[theme.palette.primary.dark, theme.palette.primary.light]}
         />
       </SimpleCard>
+      <SimpleCard title ="Application Timelines">
+        <MyTimeline/>
+      </SimpleCard>
+      
 
       <Box sx={{ py: "12px" }} />
 
