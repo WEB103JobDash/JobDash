@@ -31,7 +31,7 @@ export default function ComparisonChart({ height = "400px", color = [] }) {
       const monthName = date.toLocaleString("default", { month: "long" });
 
       if (!monthlyData[monthName]) {
-        monthlyData[monthName] = { applied: 0, interview: 0, rejected: 0 };
+        monthlyData[monthName] = { applied: 0, interview: 0, rejected: 0, offer: 0, hired: 0 };  // Add new statuses here
       }
 
       // Count every application as "applied"
@@ -42,13 +42,17 @@ export default function ComparisonChart({ height = "400px", color = [] }) {
         monthlyData[monthName].interview += 1;
       } else if (job.status === "rejected") {
         monthlyData[monthName].rejected += 1;
+      } else if (job.status === "offer") {
+        monthlyData[monthName].offer += 1; // New status
+      } else if (job.status === "accepted") {
+        monthlyData[monthName].hired += 1; // New status
       }
     });
 
     // Format data for ECharts
-    const sourceData = [["Month", "Applied", "Interview", "Rejected"]];
+    const sourceData = [["Month", "Applied", "Interview", "Rejected", "Offer", "Hired"]];  // Include new statuses in the header
     for (const [month, counts] of Object.entries(monthlyData)) {
-      sourceData.push([month, counts.applied, counts.interview, counts.rejected]);
+      sourceData.push([month, counts.applied, counts.interview, counts.rejected, counts.offer, counts.hired]); // Include new statuses in data
     }
     return sourceData;
   };
@@ -56,11 +60,26 @@ export default function ComparisonChart({ height = "400px", color = [] }) {
   // Generate source data for the chart
   const sourceData = aggregateDataByMonthNameAndStatus(jobApps);
 
+  // Distinct colors for each status
+  const statusColors = {
+    applied: "#223388",   // Dark blue for "Applied"
+    interview: "#6D9EF8", // Light blue for "Interview"
+    rejected: "#d9534f",  // Red for "Rejected"
+    offer: "#F1C40F",     // Yellow for "Offer"
+    accepted: "#2ECC71",     // Green for "accepted"
+  };
+
   // ECharts configuration
   const option = {
     grid: { top: "10%", bottom: "10%", right: "5%" },
-    legend: { show: true, data: ["Applied", "Interview", "Rejected"] },
-    color: color.length ? color : ["#223388", "#6D9EF8", "#d9534f"],
+    legend: { show: true, data: ["Applied", "Interview", "Rejected", "Offer", "Accepted"] }, // Update legend to include new statuses
+    color: [
+      statusColors.applied,
+      statusColors.interview,
+      statusColors.rejected,
+      statusColors.offer,
+      statusColors.accepted,
+    ], // Use the distinct colors for each status
     barGap: 0,
     barMaxWidth: "64px",
     dataset: { source: sourceData },
@@ -89,6 +108,8 @@ export default function ComparisonChart({ height = "400px", color = [] }) {
       { type: "bar", name: "Applied", encode: { x: "Month", y: "Applied" } },
       { type: "bar", name: "Interview", encode: { x: "Month", y: "Interview" } },
       { type: "bar", name: "Rejected", encode: { x: "Month", y: "Rejected" } },
+      { type: "bar", name: "Offer", encode: { x: "Month", y: "Offer" } },  // New series for "Offer"
+      { type: "bar", name: "Accepted", encode: { x: "Month", y: "Hired" } },  // New series for "Hired"
     ],
   };
 

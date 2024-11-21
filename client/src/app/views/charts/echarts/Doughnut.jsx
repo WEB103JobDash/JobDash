@@ -4,46 +4,40 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { Button } from "@mui/material";
 import { getJobApplications } from "../../../clientAPI";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function DoughnutChart({ height = "400px", color = [] }) {
+export default function DoughnutChart({ height = "", color = [] }) {
   const theme = useTheme();
-
   const [jobApps, setJobApps] = useState([]);
+  const [selectedField, setSelectedField] = useState("status");
 
   // Fetch job applications from the database
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const data = await getJobApplications();
-        setJobApps(data || []); // Ensure `data` is always an array
-      } catch (error) {
-        console.error("Error fetching job applications:", error);
-      }
-    };
-
-    fetchApplications();
-  }, []);
-
-  const [selectedField, setSelectedField] = useState("status");
+  const fetchApplications = async () => {
+    try {
+      const data = await getJobApplications();
+      setJobApps(data || []); // Ensure `data` is always an array
+    } catch (error) {
+      console.error("Error fetching job applications:", error);
+    }
+  };
 
   // Function to count occurrences of each unique value in the selected field
   const getCounts = (field) => {
     return jobApps.reduce((acc, item) => {
+      const value = field === "status" ? item.status : item[field];
+
+      // For status field, ensure we account for all statuses.
       if (field === "status") {
-        // Handle "status" field: count "applied," "interview," and "rejected"
-        acc["applied"] = (acc["applied"] || 0) + 1;
-        if (item.status === "interview") {
-          acc["interview"] = (acc["interview"] || 0) + 1;
-        } else if (item.status === "rejected") {
-          acc["rejected"] = (acc["rejected"] || 0) + 1;
+        if (value === "applied" || value === "interview" || value === "rejected" || value === "offer" || value === "accepted") {
+          acc[value] = (acc[value] || 0) + 1;
         }
       } else {
-        // Generic field counting (e.g., "company" or "position")
-        acc[item[field]] = (acc[item[field]] || 0) + 1;
+        acc[value] = (acc[value] || 0) + 1;
       }
+
       return acc;
     }, {});
   };
@@ -51,6 +45,7 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
   const counts = getCounts(selectedField);
   const labels = Object.keys(counts);
 
+  // Dynamically generate color for each segment
   const generateColors = (count) => {
     const colors = [];
     for (let i = 0; i < count; i++) {
@@ -91,6 +86,11 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
     },
   };
 
+  // Use effect to fetch data initially when the component is first mounted
+  useEffect(() => {
+    fetchApplications(); // Initial fetch
+  }, []);
+
   return (
     <div style={{ height }}>
       <div>
@@ -107,7 +107,12 @@ export default function DoughnutChart({ height = "400px", color = [] }) {
           <MenuItem value="position">Position</MenuItem>
         </Select>
       </div>
-      <Doughnut data={data} options={options} />
+      <div>
+        {/* still needs to be stylized <Button variant="contained" color="primary" onClick={fetchApplications} style={{ marginTop: "16px" }}>
+          Refresh Data
+        </Button> */}
+      </div>
+      <Doughnut data={data} options={options} height="500px"/>
     </div>
   );
 }
