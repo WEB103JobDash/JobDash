@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/server.js",
+    "start": "nodemon server.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run start\" \"npm run client\""
   },
@@ -24,7 +24,6 @@
     "pg": "^8.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-vis-timeline": "^2.0.3",
     "serve-favicon": "^2.5.0",
     "vis-timeline": "^7.7.3"
   },
