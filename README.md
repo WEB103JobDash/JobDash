@@ -5,4 +5,5 @@ Link for milestone, planning, readme files: https://github.com/rencap12/web103_f
 - clone the repo
 - in root, npm i
 - in client, npm i
-- git fetch to get most recent work of all branches
+- in root, npm run dev
+- git fetch to get most recent work of all branches, then pull in desired local branch
