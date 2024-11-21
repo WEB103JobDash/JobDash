@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import { styled, useTheme } from "@mui/material/styles";
 import Edit from "@mui/icons-material/Edit";
 import { Paragraph } from "app/components/Typography";
-import { getJobApplications } from '../../../clientAPI';
+import { getJobApplications, updateApplicationStatus } from '../../../clientAPI';
 
 // STYLED COMPONENTS
 const CardHeader = styled(Box)(() => ({
@@ -89,31 +89,26 @@ export default function TopSellingTable() {
   }, []);
 
   // Handle status change (cycle through statuses)
-  const handleStatusChange = async (productId) => {
+  const handleStatusChange = async (applicationId) => {
     const statusCycle = ["applied", "interview", "rejected"];
-    const product = jobApps.find(p => p.id === productId);
+    const product = jobApps.find(p => p.id === applicationId);
     const currentStatusIndex = statusCycle.indexOf(product.status);
     const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length; // Cycle through the statuses
     const updatedStatus = statusCycle[nextStatusIndex];
 
-    // Update the status in the database
     try {
-      await fetch(`/api/job_app_details/${productId}`, { // Update API endpoint as per your setup
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ status: updatedStatus })
-      });
-
+      await updateApplicationStatus(applicationId, updatedStatus);
+       
       // Update the status in UI
       const updatedJobApps = jobApps.map(jobApp =>
-        jobApp.id === productId ? { ...jobApp, status: updatedStatus } : jobApp
+        jobApp.id === applicationId ? { ...jobApp, status: updatedStatus } : jobApp
       );
       setJobApps(updatedJobApps);
+
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.log('could not update applic status from action button');
     }
+  
   };
 
   // Filter logic

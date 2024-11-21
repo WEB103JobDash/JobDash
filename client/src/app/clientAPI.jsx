@@ -110,6 +110,34 @@ export const getJobApplications = async () => {
   }
 };
 
+
+// UPDATE the STATUS for an application
+// Update the status of a job application by ID
+export const updateApplicationStatus = async (applicationId, newStatus) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/job-applications/${applicationId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus, // Pass the new status value
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to update application status");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error in updateApplicationStatus:", error);
+      throw error;
+    }
+  };
+  
+
+
 // --- Application's details API ---
 
 // Fetch application details by ID

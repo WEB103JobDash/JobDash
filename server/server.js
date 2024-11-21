@@ -68,6 +68,32 @@ app.get("/api/job-applications", async (req, res) => {
   }
 });
 
+// FOR UPDATING STATUS OF AN APPLICATION
+app.put('/api/job-applications/:id/status', async (req, res) => {
+  const { id } = req.params; // Get the application ID from the route parameter
+  const { status } = req.body; // Get the new status from the request body
+
+  try {
+    // Update the application's status in the database
+    const result = await pool.query(
+      "UPDATE job_app_details SET status = $1 WHERE id = $2 RETURNING *",
+      [status, id]
+    );
+
+    // Check if the application exists
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    // Return the updated application
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating application status:", error);
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+
 
 // FOR APPLICATION DETAILS
 // Endpoint to get job application's details by specific ID
