@@ -36,7 +36,12 @@ export default defineConfig({
     exclude:['@babel/runtime']
   },
   server: {
-    host: '0.0.0.0', // Listen on all network interfaces
-    port: 5173,
+    port: 5173, // Port to run the dev server
+    proxy: {
+      '/api': {
+        target: 'http://localhost:10000/',
+        changeOrigin: true
+      },
+    },
   }
 });
